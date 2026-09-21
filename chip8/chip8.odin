@@ -1,6 +1,9 @@
 package chip8
 
-CHIP8_CPU :: struct {
+import "core:log"
+import "core:os"
+
+chip8_cpu :: struct {
 	opcode:          u16,
 	memory:          [4096]u8,
 	v_registers:     [16]u8,
@@ -97,24 +100,33 @@ FONT_SET :: [80]u8 {
 	0x80, // F
 }
 
-init :: proc() -> CHIP8_CPU {
-	cpu := CHIP8_CPU {
-		memory          = [4096]u8{},
+init :: proc() -> ^chip8_cpu {
+	cpu := &chip8_cpu {
+		memory = [4096]u8{},
 		program_counter = 0x200,
-		opcode          = 0,
-		v_registers     = [16]u8{},
-		index_register  = 0,
-		stack_ptr       = 0,
-		delay_timer     = 0,
-		sound_timer     = 0,
-		graphics        = [64 * 32]u8{},
-		keypad          = [16]u8{},
-		stack           = [16]u16{},
+		opcode = 0,
+		v_registers = [16]u8{},
+		index_register = 0,
+		stack_ptr = 0,
+		delay_timer = 0,
+		sound_timer = 0,
+		graphics = [64 * 32]u8{},
+		keypad = [16]u8{},
+		stack = [16]u16{},
 	}
-
 	for f, i in FONT_SET {
 		cpu.memory[i] = f
 	}
-
 	return cpu
+}
+
+read_rom :: proc(cpu: ^chip8_cpu, rom_path: string) {
+	data, err := os.read_entire_file(rom_path, context.allocator)
+	if err != nil {
+		log.errorf("couldn't read log file, error: %v", err)
+	}
+	defer delete(data, context.allocator)
+	for i in 0 ..< len(data) {
+		cpu.memory[0x200 + i] = data[i]
+	}
 }
