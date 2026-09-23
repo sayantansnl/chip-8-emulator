@@ -1,16 +1,16 @@
 package main
 
 import "chip8"
-import "core:fmt"
-import "graphics"
+
+ROM_PATH :: "./rom/2-ibm-logo.ch8"
 
 main :: proc() {
-	fmt.println("Let's make a CHIP-8 emulator")
-
 	// TODO:
 	// Setup render system and register input callbacks
-	graphics.new_window()
+	//graphics.new_window()
 	// Initialize the Chip8 system and load the game into memory
+	cpu := chip8.init()
+	chip8.load_font(cpu)
+	chip8.read_rom(cpu, ROM_PATH)
 	// Emulation loop
-
 }
