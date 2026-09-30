@@ -1,45 +1,56 @@
 package chip8
 
-import "core:fmt"
 import "core:log"
 import "core:os"
 
-init :: proc() -> ^chip8_cpu {
-	cpu := &chip8_cpu {
-		memory = [4096]u8{},
-		program_counter = 0x200,
-		v_registers = [16]u8{},
-		index_register = 0,
-		stack_ptr = 0,
-		delay_timer = 0,
-		sound_timer = 0,
-		graphics = [64 * 32]u8{},
-		keypad = [16]u8{},
-		stack = [16]u16{},
-	}
+init :: proc() -> ^CPU {
+	cpu := new(CPU)
+	cpu.memory = [4096]u8{}
+	cpu.program_counter = 0x200
+	cpu.v_registers = [16]u8{}
+	cpu.index_register = 0
+	cpu.stack_ptr = 0
+	cpu.delay_timer = 0
+	cpu.sound_timer = 0
+	cpu.graphics = [64 * 32]u32{}
+	cpu.keypad = [16]u8{}
+	cpu.stack = [16]u16{}
 	return cpu
 }
 
-load_font :: proc(cpu: ^chip8_cpu) {
+load_font :: proc(cpu: ^CPU) {
 	for f, i in FONT_SET {
-		cpu.memory[i] = f
+		cpu.memory[0x50 + i] = f
 	}
 }
 
-read_rom :: proc(cpu: ^chip8_cpu, rom_path: string) {
+READ_ROM_ERROR :: enum {
+	None,
+	Unreadable,
+}
+
+MAX_ROM_SIZE :: 4096 - 0x200
+
+read_rom :: proc(cpu: ^CPU, rom_path: string) -> (int, READ_ROM_ERROR) {
 	data, err := os.read_entire_file(rom_path, context.allocator)
 	if err != nil {
 		log.errorf("couldn't read log file, error: %v", err)
+		return 0, .Unreadable
 	}
 	defer delete(data, context.allocator)
 	for i in 0 ..< len(data) {
 		cpu.memory[0x200 + i] = data[i]
 	}
-	fmt.printfln("CPU memory: %v", cpu.memory)
+	file_size := len(data)
+	if file_size <= 0 || file_size > MAX_ROM_SIZE {
+		log.error("invalid file")
+		return 0, .Unreadable
+	}
+	return file_size, .None
 }
-
-emulate_cycle :: proc(cpu: ^chip8_cpu) {
+emulate_cycle :: proc(cpu: ^CPU) {
 	opcode := fetch_opcode(cpu)
 	deco_op := decode_opcode(cpu, opcode)
+	execute_opcode(cpu, deco_op)
 	update_timers(cpu)
 }

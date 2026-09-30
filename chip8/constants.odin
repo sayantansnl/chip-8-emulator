@@ -1,11 +1,11 @@
 package chip8
 
-chip8_cpu :: struct {
+CPU :: struct {
 	memory:          [4096]u8,
 	v_registers:     [16]u8,
 	index_register:  u16,
 	program_counter: u16,
-	graphics:        [64 * 32]u8,
+	graphics:        [64 * 32]u32,
 	delay_timer:     u8,
 	sound_timer:     u8,
 	keypad:          [16]u8,
