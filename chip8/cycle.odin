@@ -33,6 +33,10 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		}
 	case 0x1000:
 		jump_to_nnn(cpu, deco_op.nnn)
+	case 0x2000:
+		call_subroutine_at_nnn(cpu, deco_op.nnn)
+	case 0x3000:
+		skip_next_instruction(cpu, deco_op.x, deco_op.kk)
 	case 0x6000:
 		set_register_Vx_to_kk(cpu, deco_op.x, deco_op.kk)
 	case 0x7000:

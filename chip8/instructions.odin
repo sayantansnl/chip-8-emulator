@@ -13,6 +13,18 @@ jump_to_nnn :: proc(cpu: ^CPU, nnn: u16) {
 	cpu.program_counter = nnn
 }
 
+call_subroutine_at_nnn :: proc(cpu: ^CPU, nnn: u16) {
+	cpu.stack[cpu.stack_ptr] = cpu.program_counter
+	cpu.stack_ptr += 1
+	cpu.program_counter = nnn
+}
+
+skip_next_instruction :: proc(cpu: ^CPU, x: u16, kk: u16) {
+	if cpu.v_registers[x] == u8(kk) {
+		cpu.program_counter += 2
+	}
+}
+
 set_register_Vx_to_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	cpu.v_registers[x] = u8(kk)
 }
