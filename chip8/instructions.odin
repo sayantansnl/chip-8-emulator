@@ -19,8 +19,15 @@ call_subroutine_at_nnn :: proc(cpu: ^CPU, nnn: u16) {
 	cpu.program_counter = nnn
 }
 
-skip_next_instruction :: proc(cpu: ^CPU, x: u16, kk: u16) {
+skip_next_instruction_if_Vx_equals_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	if cpu.v_registers[x] == u8(kk) {
+		cpu.program_counter += 2
+	}
+}
+
+
+skip_next_instruction_if_Vx_not_equals_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
+	if cpu.v_registers[x] != u8(kk) {
 		cpu.program_counter += 2
 	}
 }
