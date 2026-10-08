@@ -35,6 +35,8 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		skip_next_instruction_if_Vx_equals_kk(cpu, deco_op.x, deco_op.kk)
 	case 0x4000:
 		skip_next_instruction_if_Vx_not_equals_kk(cpu, deco_op.x, deco_op.kk)
+	case 0x5000:
+		skip_next_instrution_if_Vx_equals_Vy(cpu, deco_op.x, deco_op.y)
 	case 0x6000:
 		set_register_Vx_to_kk(cpu, deco_op.x, deco_op.kk)
 	case 0x7000:
@@ -60,6 +62,8 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		case 0x000E:
 			set_Vx_equals_Vx_SHL_1(cpu, deco_op.x)
 		}
+	case 0x9000:
+		skip_next_instruction_if_Vx_not_equals_Vy(cpu, deco_op.x, deco_op.y)
 	case 0xA000:
 		set_I_register_to_nnn(cpu, deco_op.nnn)
 	case 0xD000:

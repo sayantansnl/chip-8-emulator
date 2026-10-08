@@ -31,6 +31,12 @@ skip_next_instruction_if_Vx_not_equals_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	}
 }
 
+skip_next_instrution_if_Vx_equals_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	if cpu.v_registers[x] == cpu.v_registers[y] {
+		cpu.program_counter += 2
+	}
+}
+
 set_register_Vx_to_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	cpu.v_registers[x] = u8(kk)
 }
@@ -97,6 +103,12 @@ set_Vx_equals_Vx_SHL_1 :: proc(cpu: ^CPU, x: u16) {
 	//Save MSB in Vf
 	cpu.v_registers[FLAG_REGISTER] = (cpu.v_registers[x] & 0x80) >> 7
 	cpu.v_registers[x] <<= 1
+}
+
+skip_next_instruction_if_Vx_not_equals_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	if cpu.v_registers[x] != cpu.v_registers[y] {
+		cpu.program_counter += 2
+	}
 }
 
 draw_sprite :: proc(cpu: ^CPU, x: u16, y: u16, n: u16) {
