@@ -25,7 +25,7 @@ main :: proc() {
 	video_pitch: i32 = size_of(cpu.graphics[0]) * VIDEO_WIDTH
 
 	for {
-		quit := screen.process_input(platform)
+		quit := screen.process_input(platform, cpu.keypad[:])
 		if quit {
 			screen.destroy_platform(platform)
 			break

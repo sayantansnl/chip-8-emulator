@@ -104,3 +104,5 @@ decoded_opcode :: struct {
 	nnn:  u16,
 	kk:   u16,
 }
+
+FLAG_REGISTER :: 0x0F

@@ -47,7 +47,7 @@ update :: proc(screen: ^SCREEN, buffer: []u32, pitch: i32) {
 	sdl.RenderPresent(screen.renderer)
 }
 
-process_input :: proc(screen: ^SCREEN) -> bool {
+process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 	quit := false
 	event: sdl.Event
 
@@ -59,6 +59,77 @@ process_input :: proc(screen: ^SCREEN) -> bool {
 			#partial switch event.key.keysym.sym {
 			case .ESCAPE:
 				quit = true
+			case .x:
+				keypad[0] = 1
+			case .KP_1:
+				keypad[1] = 1
+			case .KP_2:
+				keypad[2] = 1
+			case .KP_3:
+				keypad[3] = 1
+			case .q:
+				keypad[4] = 1
+			case .w:
+				keypad[5] = 1
+			case .e:
+				keypad[6] = 1
+			case .a:
+				keypad[7] = 1
+			case .s:
+				keypad[8] = 1
+			case .d:
+				keypad[9] = 1
+			case .z:
+				keypad[0xA] = 1
+			case .c:
+				keypad[0xB] = 1
+			case .KP_4:
+				keypad[0xC] = 1
+			case .r:
+				keypad[0xD] = 1
+			case .f:
+				keypad[0xE] = 1
+			case .v:
+				keypad[0xF] = 1
+			case:
+				continue
+			}
+		case .KEYUP:
+			#partial switch event.key.keysym.sym {
+			case .ESCAPE:
+				quit = true
+			case .x:
+				keypad[0] = 0
+			case .KP_1:
+				keypad[1] = 0
+			case .KP_2:
+				keypad[2] = 0
+			case .KP_3:
+				keypad[3] = 0
+			case .q:
+				keypad[4] = 0
+			case .w:
+				keypad[5] = 0
+			case .e:
+				keypad[6] = 0
+			case .a:
+				keypad[7] = 0
+			case .s:
+				keypad[8] = 0
+			case .d:
+				keypad[9] = 0
+			case .z:
+				keypad[0xA] = 0
+			case .c:
+				keypad[0xB] = 0
+			case .KP_4:
+				keypad[0xC] = 0
+			case .r:
+				keypad[0xD] = 0
+			case .f:
+				keypad[0xE] = 0
+			case .v:
+				keypad[0xF] = 0
 			case:
 				continue
 			}

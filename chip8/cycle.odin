@@ -1,7 +1,5 @@
 package chip8
 
-import "core:log"
-
 @(require_results)
 fetch_opcode :: proc(cpu: ^CPU) -> u16 {
 	opcode := u16(cpu.memory[cpu.program_counter]) << 8 | u16(cpu.memory[cpu.program_counter + 1])
@@ -28,8 +26,6 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 			clear_display(cpu)
 		case 0x00EE:
 			return_from_subroutine(cpu)
-		case:
-			log.error("error: no other opcodes in type 0")
 		}
 	case 0x1000:
 		jump_to_nnn(cpu, deco_op.nnn)
@@ -43,6 +39,27 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		set_register_Vx_to_kk(cpu, deco_op.x, deco_op.kk)
 	case 0x7000:
 		add_kk_to_register_Vx(cpu, deco_op.x, deco_op.kk)
+	case 0x8000:
+		switch deco_op.n {
+		case 0x0000:
+			set_Vx_equals_Vy(cpu, deco_op.x, deco_op.y)
+		case 0x0001:
+			set_Vx_equals_Vx_or_Vy(cpu, deco_op.x, deco_op.y)
+		case 0x0002:
+			set_Vx_equals_Vx_and_Vy(cpu, deco_op.x, deco_op.y)
+		case 0x0003:
+			set_Vx_equals_Vx_XOR_Vy(cpu, deco_op.x, deco_op.y)
+		case 0x0004:
+			set_Vx_equals_Vx_plus_Vy_and_Vf_to_carry(cpu, deco_op.x, deco_op.y)
+		case 0x0005:
+			set_Vx_equals_Vx_minus_Vy_and_Vf_to_not_borrow(cpu, deco_op.x, deco_op.y)
+		case 0x0006:
+			set_Vx_equals_Vx_SHR_1(cpu, deco_op.x)
+		case 0x0007:
+			set_Vx_equals_Vy_minus_Vx_and_Vf_to_not_borrow(cpu, deco_op.x, deco_op.y)
+		case 0x000E:
+			set_Vx_equals_Vx_SHL_1(cpu, deco_op.x)
+		}
 	case 0xA000:
 		set_I_register_to_nnn(cpu, deco_op.nnn)
 	case 0xD000:

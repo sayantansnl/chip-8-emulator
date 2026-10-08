@@ -25,7 +25,6 @@ skip_next_instruction_if_Vx_equals_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	}
 }
 
-
 skip_next_instruction_if_Vx_not_equals_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
 	if cpu.v_registers[x] != u8(kk) {
 		cpu.program_counter += 2
@@ -42,6 +41,62 @@ add_kk_to_register_Vx :: proc(cpu: ^CPU, x: u16, kk: u16) {
 
 set_I_register_to_nnn :: proc(cpu: ^CPU, nnn: u16) {
 	cpu.index_register = nnn
+}
+
+set_Vx_equals_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	cpu.v_registers[x] = cpu.v_registers[y]
+}
+
+set_Vx_equals_Vx_or_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	cpu.v_registers[x] |= cpu.v_registers[y]
+}
+
+set_Vx_equals_Vx_and_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	cpu.v_registers[x] &= cpu.v_registers[y]
+}
+
+set_Vx_equals_Vx_XOR_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
+	cpu.v_registers[x] ~= cpu.v_registers[y]
+}
+
+set_Vx_equals_Vx_plus_Vy_and_Vf_to_carry :: proc(cpu: ^CPU, x: u16, y: u16) {
+	sum := cpu.v_registers[x] + cpu.v_registers[y]
+	cpu.v_registers[x] = sum & 0xFF
+	if sum > 0xFF {
+		cpu.v_registers[FLAG_REGISTER] = 1
+	} else {
+		cpu.v_registers[FLAG_REGISTER] = 0
+	}
+}
+
+set_Vx_equals_Vx_minus_Vy_and_Vf_to_not_borrow :: proc(cpu: ^CPU, x: u16, y: u16) {
+	if cpu.v_registers[x] > cpu.v_registers[y] {
+		cpu.v_registers[FLAG_REGISTER] = 1
+	} else {
+		cpu.v_registers[FLAG_REGISTER] = 0
+	}
+	cpu.v_registers[x] -= cpu.v_registers[y]
+}
+
+set_Vx_equals_Vy_minus_Vx_and_Vf_to_not_borrow :: proc(cpu: ^CPU, x: u16, y: u16) {
+	if cpu.v_registers[y] > cpu.v_registers[x] {
+		cpu.v_registers[FLAG_REGISTER] = 1
+	} else {
+		cpu.v_registers[FLAG_REGISTER] = 0
+	}
+	cpu.v_registers[x] = cpu.v_registers[y] - cpu.v_registers[x]
+}
+
+set_Vx_equals_Vx_SHR_1 :: proc(cpu: ^CPU, x: u16) {
+	//Save LSB in Vf
+	cpu.v_registers[FLAG_REGISTER] = cpu.v_registers[x] & 0x1
+	cpu.v_registers[x] >>= 1
+}
+
+set_Vx_equals_Vx_SHL_1 :: proc(cpu: ^CPU, x: u16) {
+	//Save MSB in Vf
+	cpu.v_registers[FLAG_REGISTER] = (cpu.v_registers[x] & 0x80) >> 7
+	cpu.v_registers[x] <<= 1
 }
 
 draw_sprite :: proc(cpu: ^CPU, x: u16, y: u16, n: u16) {
