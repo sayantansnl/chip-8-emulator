@@ -1,5 +1,7 @@
 package chip8
 
+import "core:math/rand"
+
 clear_display :: proc(cpu: ^CPU) {
 	cpu.graphics = {}
 }
@@ -109,6 +111,15 @@ skip_next_instruction_if_Vx_not_equals_Vy :: proc(cpu: ^CPU, x: u16, y: u16) {
 	if cpu.v_registers[x] != cpu.v_registers[y] {
 		cpu.program_counter += 2
 	}
+}
+
+jump_to_nnn_plus_V0 :: proc(cpu: ^CPU, nnn: u16) {
+	cpu.program_counter = nnn + u16(cpu.v_registers[0])
+}
+
+set_Vx_equals_rand_byte_and_kk :: proc(cpu: ^CPU, x: u16, kk: u16) {
+	b := rand.uint32()
+	cpu.v_registers[x] = u8(b) & u8(kk)
 }
 
 draw_sprite :: proc(cpu: ^CPU, x: u16, y: u16, n: u16) {

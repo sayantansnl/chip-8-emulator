@@ -66,6 +66,10 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		skip_next_instruction_if_Vx_not_equals_Vy(cpu, deco_op.x, deco_op.y)
 	case 0xA000:
 		set_I_register_to_nnn(cpu, deco_op.nnn)
+	case 0xB000:
+		jump_to_nnn_plus_V0(cpu, deco_op.nnn)
+	case 0xC000:
+		set_Vx_equals_rand_byte_and_kk(cpu, deco_op.x, deco_op.kk)
 	case 0xD000:
 		draw_sprite(cpu, deco_op.x, deco_op.y, deco_op.n)
 	}
