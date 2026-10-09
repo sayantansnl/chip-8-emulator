@@ -61,11 +61,11 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 				quit = true
 			case .x:
 				keypad[0] = 1
-			case .KP_1:
+			case .NUM1:
 				keypad[1] = 1
-			case .KP_2:
+			case .NUM2:
 				keypad[2] = 1
-			case .KP_3:
+			case .NUM3:
 				keypad[3] = 1
 			case .q:
 				keypad[4] = 1
@@ -83,7 +83,7 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 				keypad[0xA] = 1
 			case .c:
 				keypad[0xB] = 1
-			case .KP_4:
+			case .NUM4:
 				keypad[0xC] = 1
 			case .r:
 				keypad[0xD] = 1
@@ -100,11 +100,11 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 				quit = true
 			case .x:
 				keypad[0] = 0
-			case .KP_1:
+			case .NUM1:
 				keypad[1] = 0
-			case .KP_2:
+			case .NUM2:
 				keypad[2] = 0
-			case .KP_3:
+			case .NUM3:
 				keypad[3] = 0
 			case .q:
 				keypad[4] = 0
@@ -122,7 +122,7 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 				keypad[0xA] = 0
 			case .c:
 				keypad[0xB] = 0
-			case .KP_4:
+			case .NUM4:
 				keypad[0xC] = 0
 			case .r:
 				keypad[0xD] = 0
