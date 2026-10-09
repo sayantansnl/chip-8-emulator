@@ -3,7 +3,7 @@ package main
 import "chip8"
 import "screen"
 
-ROM_PATH :: "./rom/tetris.rom"
+ROM_PATH :: "./rom/Space Invaders [David Winter].ch8"
 VIDEO_WIDTH :: 64
 VIDEO_HEIGHT :: 32
 SCALE :: 20
