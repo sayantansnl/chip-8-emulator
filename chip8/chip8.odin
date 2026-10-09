@@ -20,7 +20,7 @@ init :: proc() -> ^CPU {
 
 load_font :: proc(cpu: ^CPU) {
 	for f, i in FONT_SET {
-		cpu.memory[0x50 + i] = f
+		cpu.memory[FONTSET_START_LOCATION + i] = f
 	}
 }
 

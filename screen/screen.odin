@@ -33,9 +33,9 @@ init_platform :: proc(
 }
 
 destroy_platform :: proc(screen: ^SCREEN) {
-	sdl.DestroyWindow(screen.window)
-	sdl.DestroyRenderer(screen.renderer)
 	sdl.DestroyTexture(screen.texture)
+	sdl.DestroyRenderer(screen.renderer)
+	sdl.DestroyWindow(screen.window)
 	sdl.Quit()
 	free(screen)
 }
@@ -138,4 +138,14 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 		}
 	}
 	return quit
+}
+
+get_time :: proc() -> f64 {
+	counter := sdl.GetPerformanceCounter()
+	frequency := sdl.GetPerformanceFrequency()
+	return f64(counter) / f64(frequency)
+}
+
+delay :: proc(milliseconds: u32) {
+	sdl.Delay(milliseconds)
 }
