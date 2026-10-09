@@ -13,6 +13,14 @@ CPU :: struct {
 	stack_ptr:       u16,
 }
 
+
+READ_ROM_ERROR :: enum {
+	None,
+	Unreadable,
+}
+
+MAX_ROM_SIZE :: 4096 - 0x200
+
 FONT_SET :: [80]u8 {
 	0xF0,
 	0x90,

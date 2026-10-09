@@ -3,7 +3,7 @@ package main
 import "chip8"
 import "screen"
 
-ROM_PATH :: "./rom/6-keypad.ch8"
+ROM_PATH :: "./rom/Space Invaders [David Winter].ch8"
 VIDEO_WIDTH :: 64
 VIDEO_HEIGHT :: 32
 SCALE :: 10
@@ -30,7 +30,10 @@ main :: proc() {
 			screen.destroy_platform(platform)
 			break
 		}
-		chip8.emulate_cycle(cpu)
+		for _ in 0 ..< 5 { 	// ~10-12
+			chip8.emulate_cycle(cpu)
+		}
+		chip8.update_timers(cpu)
 		screen.update(platform, cpu.graphics[:], video_pitch)
 	}
 }

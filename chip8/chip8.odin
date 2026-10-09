@@ -24,13 +24,6 @@ load_font :: proc(cpu: ^CPU) {
 	}
 }
 
-READ_ROM_ERROR :: enum {
-	None,
-	Unreadable,
-}
-
-MAX_ROM_SIZE :: 4096 - 0x200
-
 read_rom :: proc(cpu: ^CPU, rom_path: string) -> (int, READ_ROM_ERROR) {
 	data, err := os.read_entire_file(rom_path, context.allocator)
 	if err != nil {
@@ -48,9 +41,9 @@ read_rom :: proc(cpu: ^CPU, rom_path: string) -> (int, READ_ROM_ERROR) {
 	}
 	return file_size, .None
 }
+
 emulate_cycle :: proc(cpu: ^CPU) {
 	opcode := fetch_opcode(cpu)
 	deco_op := decode_opcode(cpu, opcode)
 	execute_opcode(cpu, deco_op)
-	update_timers(cpu)
 }
