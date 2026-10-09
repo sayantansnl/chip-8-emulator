@@ -3,7 +3,7 @@ package main
 import "chip8"
 import "screen"
 
-ROM_PATH :: "./rom/ibm.ch8"
+ROM_PATH :: "./rom/Tank.ch8"
 VIDEO_WIDTH :: 64
 VIDEO_HEIGHT :: 32
 SCALE :: 10

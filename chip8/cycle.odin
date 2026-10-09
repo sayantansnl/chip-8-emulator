@@ -72,6 +72,34 @@ execute_opcode :: proc(cpu: ^CPU, deco_op: decoded_opcode) {
 		set_Vx_equals_rand_byte_and_kk(cpu, deco_op.x, deco_op.kk)
 	case 0xD000:
 		draw_sprite(cpu, deco_op.x, deco_op.y, deco_op.n)
+	case 0xE000:
+		switch deco_op.kk {
+		case 0x9E:
+			skip_next_instruction_if_key_with_Vx_val_pressed(cpu, deco_op.x)
+		case 0xA1:
+			skip_next_instruction_if_key_with_Vx_val_not_pressed(cpu, deco_op.x)
+		}
+	case 0xF000:
+		switch deco_op.kk {
+		case 0x07:
+			set_Vx_equals_delay_timer_val(cpu, deco_op.x)
+		case 0x0A:
+			wait_for_key_press(cpu, deco_op.x)
+		case 0x15:
+			set_delay_timer_to_Vx(cpu, deco_op.x)
+		case 0x18:
+			set_sound_timer_to_Vx(cpu, deco_op.x)
+		case 0x1E:
+			add_I_and_Vx(cpu, deco_op.x)
+		case 0x29:
+			set_I_to_sprite_location_for_Vx(cpu, deco_op.x)
+		case 0x33:
+			store_bcd(cpu, deco_op.x)
+		case 0x55:
+			store_V0_to_Vx_in_memory(cpu, deco_op.x)
+		case 0x65:
+			read_registers_from_memory(cpu, deco_op.x)
+		}
 	}
 }
 

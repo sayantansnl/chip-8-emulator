@@ -153,3 +153,100 @@ draw_sprite :: proc(cpu: ^CPU, x: u16, y: u16, n: u16) {
 		}
 	}
 }
+
+skip_next_instruction_if_key_with_Vx_val_pressed :: proc(cpu: ^CPU, x: u16) {
+	key := cpu.v_registers[x]
+	if cpu.keypad[key] == 1 {
+		cpu.program_counter += 2
+	}
+}
+
+skip_next_instruction_if_key_with_Vx_val_not_pressed :: proc(cpu: ^CPU, x: u16) {
+	key := cpu.v_registers[x]
+	if cpu.keypad[key] == 0 {
+		cpu.program_counter += 2
+	}
+}
+
+set_Vx_equals_delay_timer_val :: proc(cpu: ^CPU, x: u16) {
+	cpu.v_registers[x] = cpu.delay_timer
+}
+
+wait_for_key_press :: proc(cpu: ^CPU, x: u16) {
+	if cpu.keypad[0] == 1 {
+		cpu.v_registers[x] = 0
+	} else if cpu.keypad[1] == 1 {
+		cpu.v_registers[x] = 1
+	} else if cpu.keypad[2] == 1 {
+		cpu.v_registers[x] = 2
+	} else if cpu.keypad[3] == 1 {
+		cpu.v_registers[x] = 3
+	} else if cpu.keypad[4] == 1 {
+		cpu.v_registers[x] = 4
+	} else if cpu.keypad[5] == 1 {
+		cpu.v_registers[x] = 5
+	} else if cpu.keypad[6] == 1 {
+		cpu.v_registers[x] = 6
+	} else if cpu.keypad[7] == 1 {
+		cpu.v_registers[x] = 7
+	} else if cpu.keypad[8] == 1 {
+		cpu.v_registers[x] = 8
+	} else if cpu.keypad[9] == 1 {
+		cpu.v_registers[x] = 9
+	} else if cpu.keypad[10] == 1 {
+		cpu.v_registers[x] = 10
+	} else if cpu.keypad[11] == 1 {
+		cpu.v_registers[x] = 11
+	} else if cpu.keypad[12] == 1 {
+		cpu.v_registers[x] = 12
+	} else if cpu.keypad[13] == 1 {
+		cpu.v_registers[x] = 13
+	} else if cpu.keypad[14] == 1 {
+		cpu.v_registers[x] = 14
+	} else if cpu.keypad[15] == 1 {
+		cpu.v_registers[x] = 15
+	} else {
+		cpu.program_counter -= 2
+	}
+}
+
+set_delay_timer_to_Vx :: proc(cpu: ^CPU, x: u16) {
+	cpu.delay_timer = cpu.v_registers[x]
+}
+
+set_sound_timer_to_Vx :: proc(cpu: ^CPU, x: u16) {
+	cpu.sound_timer = cpu.v_registers[x]
+}
+
+add_I_and_Vx :: proc(cpu: ^CPU, x: u16) {
+	cpu.index_register += u16(cpu.v_registers[x])
+}
+
+set_I_to_sprite_location_for_Vx :: proc(cpu: ^CPU, x: u16) {
+	digit := cpu.v_registers[x]
+	cpu.index_register = u16(FONTSET_START_LOCATION + (5 * digit))
+}
+
+store_bcd :: proc(cpu: ^CPU, x: u16) {
+	val := cpu.v_registers[x]
+	//ones-place
+	cpu.memory[cpu.index_register + 2] = val % 10
+	val /= 10
+	//tens-place
+	cpu.memory[cpu.index_register + 1] = val % 10
+	val /= 10
+	//hundreds-place
+	cpu.memory[cpu.index_register] = val % 10
+}
+
+store_V0_to_Vx_in_memory :: proc(cpu: ^CPU, x: u16) {
+	for i in 0 ..= x {
+		cpu.memory[cpu.index_register + i] = cpu.v_registers[i]
+	}
+}
+
+read_registers_from_memory :: proc(cpu: ^CPU, x: u16) {
+	for i in 0 ..= x {
+		cpu.v_registers[i] = cpu.memory[cpu.index_register + i]
+	}
+}

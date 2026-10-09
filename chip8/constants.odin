@@ -106,3 +106,4 @@ decoded_opcode :: struct {
 }
 
 FLAG_REGISTER :: 0x0F
+FONTSET_START_LOCATION :: 0x50
