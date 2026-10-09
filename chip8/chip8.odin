@@ -3,6 +3,7 @@ package chip8
 import "core:log"
 import "core:os"
 
+@(require_results)
 init :: proc() -> ^CPU {
 	cpu := new(CPU)
 	cpu.memory = [4096]u8{}

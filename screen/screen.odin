@@ -8,6 +8,7 @@ SCREEN :: struct {
 	texture:  ^sdl.Texture,
 }
 
+@(require_results)
 init_platform :: proc(
 	title: cstring,
 	window_width: i32,
@@ -47,6 +48,7 @@ update :: proc(screen: ^SCREEN, buffer: []u32, pitch: i32) {
 	sdl.RenderPresent(screen.renderer)
 }
 
+@(require_results)
 process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 	quit := false
 	event: sdl.Event
@@ -140,6 +142,7 @@ process_input :: proc(screen: ^SCREEN, keypad: []u8) -> bool {
 	return quit
 }
 
+@(require_results)
 get_time :: proc() -> f64 {
 	counter := sdl.GetPerformanceCounter()
 	frequency := sdl.GetPerformanceFrequency()
